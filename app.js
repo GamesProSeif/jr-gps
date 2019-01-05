@@ -9,7 +9,7 @@ let commands = JSON.parse(fs.readFileSync('Storage/commands.json', 'utf8'));
 let bannedWords = JSON.parse(fs.readFileSync('Storage/bannedWords.json', 'utf8'));
 let reportLog = JSON.parse(fs.readFileSync('Storage/reportLog.json', 'utf8'));
 let prefix = botData.prefix;
-let token = 'NTIyNDY5MjIzNjc1NzIzNzg2.DvLc5A.j1aw6_kTDAjA7UiCiUsJfHCwfgI';
+let token = process.env.token;
 
 bot.on('error', console.error);
 
@@ -1286,21 +1286,23 @@ bot.on('message', message => {
       for (let user in usrPoint) {
         if (usrPoint[user].name.toUpperCase() === args[0].toUpperCase()) {
           usrqry = usrPoint[user];
+          errFound = true;
           break;
         }
         else if (usrPoint[user].id == args[0]) {
           usrqry = usrPoint[user];
+          errFound = true;
           break;
         }
         else if (mentionedUsr != undefined) {
           if (usrPoint[user].id == mentionedUsr.id) {
             usrqry = usrPoint[user];
+            errFound = true;
             break;
           }
         }
-        else errFound = true;
       }
-      if (errFound == true) {
+      if (errFound == false) {
         message.channel.send({embed:{
           title: 'Error',
           description: `Couldn\'t find the user specified in the bot\'s data system\nTo add the user, please use mention user as your argument\nExample: ${prefix}user-info @GamesProSeif`,
