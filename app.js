@@ -9,7 +9,7 @@ let commands = JSON.parse(fs.readFileSync('Storage/commands.json', 'utf8'));
 let bannedWords = JSON.parse(fs.readFileSync('Storage/bannedWords.json', 'utf8'));
 let reportLog = JSON.parse(fs.readFileSync('Storage/reportLog.json', 'utf8'));
 let prefix = botData.prefix;
-let token = process.env.token;
+let token = 'NTIyNDY5MjIzNjc1NzIzNzg2.DvLc5A.j1aw6_kTDAjA7UiCiUsJfHCwfgI';
 
 bot.on('error', console.error);
 
@@ -46,6 +46,8 @@ bot.on('message', message => {
     }
   }
 
+  usrPoint[sender.id].messagesSent++;
+
   // Profanity filter
   function alphaOnly(a) {
     var b = '';
@@ -63,8 +65,11 @@ bot.on('message', message => {
     if (botData.banWordCondition == false) break;
     for (let p = 0; p < filterMsg.length; p++) {
       if (filterMsg[p].toUpperCase() == bannedWords[k].toUpperCase()) {
-        message.delete();
         usrPoint[sender.id].sweared++;
+        message.delete();
+        fs.writeFile('Storage/usrPoint.json', JSON.stringify(usrPoint), (err) => {
+          if (err) console.error(err);
+        });
         return;
       }
     }
@@ -1207,11 +1212,11 @@ bot.on('message', message => {
       if (!hasAdmin) {
         message.channel.send({embed:{
           title: 'Found user',
-          description: `Details of user ${usrPoint[sender.id].username}`,
+          description: `Details of user ${usrPoint[sender.id].name}`,
           color: trueClr,
           fields: [{
             name: 'Name',
-            value: usrPoint[sender.id].username,
+            value: usrPoint[sender.id].name,
             inline: true
           },{
             name: 'ID',
@@ -1231,11 +1236,11 @@ bot.on('message', message => {
       else {
         message.channel.send({embed:{
           title: 'Found user',
-          description: `Details of user ${usrPoint[sender.id].username}`,
+          description: `Details of user ${usrPoint[sender.id].name}`,
           color: trueClr,
           fields: [{
             name: 'Name',
-            value: usrPoint[sender.id].username,
+            value: usrPoint[sender.id].name,
             inline: true
           },{
             name: 'ID',
@@ -1306,11 +1311,11 @@ bot.on('message', message => {
       if (!hasAdmin) {
         message.channel.send({embed:{
           title: 'Found user',
-          description: `Details of user ${usrqry.username}`,
+          description: `Details of user ${usrqry.name}`,
           color: trueClr,
           fields: [{
             name: 'Name',
-            value: usrqry.username,
+            value: usrqry.name,
             inline: true
           },{
             name: 'ID',
@@ -1330,11 +1335,11 @@ bot.on('message', message => {
       else {
         message.channel.send({embed:{
           title: 'Found user',
-          description: `Details of user ${usrqry.username}`,
+          description: `Details of user ${usrqry.name}`,
           color: trueClr,
           fields: [{
             name: 'Name',
-            value: usrqry.username,
+            value: usrqry.name,
             inline: true
           },{
             name: 'ID',
