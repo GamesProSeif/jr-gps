@@ -1,0 +1,27 @@
+{
+  "name": "jr-jps",
+  "version": "1.0.0",
+  "description": "This is a discord bot",
+  "main": "app.js",
+  "dependencies": {
+    "discord.js": "^11.4.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GamesProSeif/jr-gps.git"
+  },
+  "keywords": [
+    "bot",
+    "Discord"
+  ],
+  "author": "Seif Mansour",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/GamesProSeif/jr-gps/issues"
+  },
+  "homepage": "https://github.com/GamesProSeif/jr-gps#readme"
+}
