@@ -924,7 +924,7 @@ bot.on('message', message => {
       wrnUsr[sender.id].messagesDeleted ++;
       // Warning the user
       if (wrnUsr[sender.id].warned === false) {
-        if (wrnUsr[sender.id].messagesDeleted === 10) {
+        if (wrnUsr[sender.id].messagesDeleted % 10 == 0) {
           bot.channels.get('515798594373025803').send({embed:{
             title: 'Alert',
             description: `User ${wrnUsr[sender.id].name} has been warned!\nReason: sending ${wrnUsr[sender.id].messagesDeleted} messages in \`Wilderness\` while development is on`,
@@ -933,9 +933,12 @@ bot.on('message', message => {
           wrnUsr[sender.id].warned = true;
         }
       }
-
+      else {
+        if (wrnUsr[sender.id].messagesDeleted % 10 == 1) {
+          wrnUsr[sender.id].warned = false;
+        }
+      }
     }
-
   }
 
   // Broadcast command
