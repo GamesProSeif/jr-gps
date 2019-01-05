@@ -1740,6 +1740,16 @@ bot.on('message', message => {
 
   // Rank command
   if (msg.startsWith(`${prefix}RANK`)) {
+    let msgCont = msg.split(" ")
+    if (msgCont[0] != `${prefix}RANK`) return;
+    if (!args[0]) {
+      message.channel.send({embed:{
+        title: 'Error',
+        description: 'Please specify one of the \`rank\` options as your argument',
+        color: errClr
+      }});
+      return;
+    }
     // Add arguement
     if (args[0].toUpperCase() === 'ADD') {
       hasAdmin = message.member.hasPermission("ADMINISTRATOR");
@@ -2001,6 +2011,14 @@ bot.on('message', message => {
           name: 'List',
           value: `**Description**: Displays the ranks list\n**Usage**: \`${prefix}rank list\``
         }]
+      }});
+    }
+
+    else {
+      message.channel.send({embed:{
+        title: 'Error',
+        description: `\`${args[0]}\` is not recognized as an option for \`rank\``,
+        color: errClr
       }});
     }
 
