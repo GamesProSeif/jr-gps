@@ -1,0 +1,104 @@
+{
+  "Help": {
+    "name":"Help",
+    "group":"User",
+    "desc":"Displays a list of commands.",
+    "usage":"help [group OR command]"
+  },
+  "Ping": {
+    "name":"Ping",
+    "group":"User",
+    "desc":"Shows the ping of the user.",
+    "usage":"ping"
+  },
+  "Say": {
+    "name":"Say",
+    "group":"Admin",
+    "desc":"Says a message",
+    "usage":"say <message>"
+  },
+  "Deletemsg": {
+    "name":"Deletemsg",
+    "group":"Owner",
+    "desc":"Sets the delete condition of wilderness channels",
+    "usage":"deletemsg <yes/no>"
+  },
+  "Bc": {
+    "name":"Bc",
+    "group":"Admin",
+    "desc":"Broadcasts a message, only works in broadcast channel",
+    "usage":"bc <ping: yes/no> <message>"
+  },
+  "Verify": {
+    "name":"Verify",
+    "group":"User",
+    "desc":"Verifies the user and gives 50 points",
+    "usage":"verify"
+  },
+  "Sp": {
+    "name":"Sp",
+    "group":"User",
+    "desc":"Shows the points and rank of the user or other user specified",
+    "usage":"sp [mention-user]"
+  },
+  "Add-p": {
+    "name":"Add-p",
+    "group":"Admin",
+    "desc":"Adds points to a user",
+    "usage":"add-p <mention-user> <points>"
+  },
+  "Remove-p": {
+    "name":"Remove-p",
+    "group":"Admin",
+    "desc":"Removes points from a user",
+    "usage":"remove-p <mention-user> <points>"
+  },
+  "Set-p": {
+    "name":"Set-p",
+    "group":"Admin",
+    "desc":"Sets points of a user",
+    "usage":"set-p <mention-user> <points>"
+  },
+  "Prefix-set": {
+    "name":"Prefix-set",
+    "group":"Owner",
+    "desc":"Sets the prefix of the bot",
+    "usage":"prefix-set <new prefix>"
+  },
+  "Ss": {
+    "name":"Ss",
+    "group":"User",
+    "desc":"Sends a screenshot of the spleef map mentioned",
+    "usage":"ss <number of map>"
+  },
+  "Server": {
+    "name": "Server",
+    "group": "User",
+    "desc": "Shows information about Terraria server",
+    "usage": "server [ip/port/page/vote/set]"
+  },
+  "Ban-word": {
+    "name": "Ban-word",
+    "group": "Admin",
+    "desc": "Does function on the banned words",
+    "usage": "ban-word <add/remove/list/toggle>"
+  },
+  "Report": {
+    "name": "Report",
+    "group": "User",
+    "desc": "Reports your message to the owner",
+    "usage": "report <message/del>"
+  },
+  "Rank": {
+    "name": "Rank",
+    "group": "Admin",
+    "desc": "Does different functions on ranks",
+    "usage": "rank <add/remove/list>"
+  },
+  "Levelup": {
+    "name": "Levelup",
+    "group": "User",
+    "desc": "Levels up the user when he/she has the required amount of points",
+    "usage": "levelup"
+  }
+}
