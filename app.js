@@ -37,6 +37,7 @@ bot.on('message', message => {
   if (!usrPoint[sender.id]) {
     usrPoint[sender.id] = {
       "name": sender.username,
+      "id": sender.id,
       "points": 0,
       "verified": false,
       "rank": "Default",
@@ -1199,7 +1200,7 @@ bot.on('message', message => {
     }
   }
 
-  // user-sweared command
+  // user-info command
   if (msg.startsWith(`${prefix}USER-INFO`)) {
     hasAdmin = message.member.hasPermission("ADMINISTRATOR");
     if (!args[0]) {
@@ -1262,6 +1263,19 @@ bot.on('message', message => {
     }
     else {
       let mentionedUsr = message.mentions.users.first();
+      if (mentionedUsr != undefined) {
+        if (!usrPoint[mentionedUsr.id]) {
+          usrPoint[mentionedUsr.id] = {
+            "name": mentionedUsr.username,
+            "id": mentionedUsr.id,
+            "points": 0,
+            "verified": false,
+            "rank": "Default",
+            "messagesSent": 0,
+            "sweared": 0
+          }
+        }
+      }
       let usrqry;
       let errFound = false
       for (let user in usrPoint) {
@@ -1284,7 +1298,7 @@ bot.on('message', message => {
       if (errFound == true) {
         message.channel.send({embed:{
           title: 'Error',
-          description: 'Couldn\'t find the user specified',
+          description: `Couldn\'t find the user specified in the bot\'s data system\nTo add the user, please use mention user as your argument\nExample: ${prefix}user-info @GamesProSeif`,
           color: errClr
         }});
         return;
@@ -1392,9 +1406,12 @@ bot.on('message', message => {
       if (!usrPoint[mentionedUsr.id]) {
         usrPoint[mentionedUsr.id] = {
           "name": mentionedUsr.username,
+          "id": mentionedUsr.id,
           "points": 0,
           "verified": false,
-          "rank": "Default"
+          "rank": "Default",
+          "messagesSent": 0,
+          "sweared": 0
         }
       }
       message.channel.send({embed:{
@@ -1441,9 +1458,12 @@ bot.on('message', message => {
     if (!usrPoint[mentionedUsr.id]) {
       usrPoint[mentionedUsr.id] = {
         "name": mentionedUsr.username,
+        "id": mentionedUsr.id,
         "points": 0,
         "verified": false,
-        "rank": "Default"
+        "rank": "Default",
+        "messagesSent": 0,
+        "sweared": 0
       }
     }
     if (!args[args.length - 1]) {
@@ -1518,9 +1538,12 @@ bot.on('message', message => {
     if (!usrPoint[mentionedUsr.id]) {
       usrPoint[mentionedUsr.id] = {
         "name": mentionedUsr.username,
+        "id": mentionedUsr.id,
         "points": 0,
         "verified": false,
-        "rank": "Default"
+        "rank": "Default",
+        "messagesSent": 0,
+        "sweared": 0
       }
     }
     if (!args[args.length - 1]) {
@@ -1595,9 +1618,12 @@ bot.on('message', message => {
     if (!usrPoint[mentionedUsr.id]) {
       usrPoint[mentionedUsr.id] = {
         "name": mentionedUsr.username,
+        "id": mentionedUsr.id,
         "points": 0,
         "verified": false,
-        "rank": "Default"
+        "rank": "Default",
+        "messagesSent": 0,
+        "sweared": 0
       }
     }
     if (!args[args.length - 1]) {
@@ -1656,7 +1682,7 @@ bot.on('message', message => {
       usrPoint[userID].points = 0;
       usrPoint[userID].verified = false;
       usrPoint[userID].rank = "Default",
-      usrPoint[userID].sweared = 0;
+      usrPoint[userID].sweared = 0
     }
     message.channel.send({embed:{
       title: 'Operation successful!',
