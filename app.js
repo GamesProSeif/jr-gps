@@ -11,7 +11,7 @@ let reportLog = JSON.parse(fs.readFileSync('Storage/reportLog.json', 'utf8'));
 let prefix = botData.prefix;
 let token = process.env.token; // replace with bot's token
 
-bot.on('error', console.error(error));
+bot.on('error', console.error);
 
 bot.on('message', message => {
 
