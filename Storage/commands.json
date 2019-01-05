@@ -17,6 +17,12 @@
     "desc":"Says a message",
     "usage":"say <message>"
   },
+  "User-info": {
+    "name":"User-info",
+    "group":"User",
+    "desc":"Displays information about user",
+    "usage":"user-info [userName/userID/userMention]"
+  },
   "Deletemsg": {
     "name":"Deletemsg",
     "group":"Owner",
