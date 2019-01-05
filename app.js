@@ -383,7 +383,7 @@ bot.on('message', message => {
         inline: false
       },{
         name: 'Time',
-        value: `${bot.ping} ms`,
+        value: `${parseInt(bot.ping)} ms`,
         inline: false
       }],
       color: trueClr
