@@ -9,9 +9,9 @@ let commands = JSON.parse(fs.readFileSync('Storage/commands.json', 'utf8'));
 let bannedWords = JSON.parse(fs.readFileSync('Storage/bannedWords.json', 'utf8'));
 let reportLog = JSON.parse(fs.readFileSync('Storage/reportLog.json', 'utf8'));
 let prefix = botData.prefix;
-let token = process.env.token;
+let token = process.env.token; // replace with bot's token
 
-bot.on('error', console.error);
+bot.on('error', console.error(error));
 
 bot.on('message', message => {
 
@@ -30,7 +30,7 @@ bot.on('message', message => {
     return string.charAt(0).toUpperCase() + string.slice(1).toString().toLowerCase();
   }
 
-  if (sender.id == '522469223675723786') return;
+  if (sender.id == process.env.botId) return; // replace with bot's ID
   if (sender.bot) return;
 
   // Adding the user to user point
@@ -488,7 +488,7 @@ bot.on('message', message => {
         let choiceMatched = false;
         let choiceNum = collected.first().content;
         for (let o = 0; o < validReports.length; o++) {
-          if (choiceNum == validReports[o]) choiceMatched = true;
+          if (choiceNum == validReports[o + 1]) choiceMatched = true;
         }
         if (choiceMatched === false) {
           message.channel.send({embed:{
@@ -2038,21 +2038,7 @@ bot.on('message', message => {
 
 // Logging when the bot starts
 bot.on('ready', () => {
-  let today = new Date();
-  let dd = today.getDate();
-  let mm = today.getMonth()+1; //January is 0!
-  let yyyy = today.getFullYear();
-
-  if(dd<10) {
-      dd = '0'+dd
-  }
-
-  if(mm<10) {
-      mm = '0'+mm
-  }
-  today = mm + '/' + dd + '/' + yyyy;
-  console.log(today);
-  console.log('>');
+  console.log('Jr. GPS launched...');
 
   bot.user.setStatus('online'); // Status can be 'Online', 'idle', 'invisible', & 'dnd'
   bot.user.setActivity(`${prefix}help`);
