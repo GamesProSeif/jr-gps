@@ -33,6 +33,18 @@ bot.on('message', message => {
   if (sender.id == '522469223675723786') return;
   if (sender.bot) return;
 
+  // Adding the user to user point
+  if (!usrPoint[sender.id]) {
+    usrPoint[sender.id] = {
+      "name": sender.username,
+      "points": 0,
+      "verified": false,
+      "rank": "Default",
+      "messagesSent": 0,
+      "sweared": 0
+    }
+  }
+
   // Profanity filter
   function alphaOnly(a) {
     var b = '';
@@ -51,6 +63,7 @@ bot.on('message', message => {
     for (let p = 0; p < filterMsg.length; p++) {
       if (filterMsg[p].toUpperCase() == bannedWords[k].toUpperCase()) {
         message.delete();
+        usrPoint[sender.id].sweared++;
         return;
       }
     }
@@ -1186,16 +1199,112 @@ bot.on('message', message => {
     }
   }
 
-  // Points system //
-  // Adding the user
-  if (!usrPoint[sender.id]) {
-    usrPoint[sender.id] = {
-      "name": sender.username,
-      "points": 0,
-      "verified": false,
-      "rank": "Default"
+  // user-sweared command
+  if (msg.startsWith(`${prefix}USER-INFO`)) {
+    hasAdmin = message.member.hasPermission("ADMINISTRATOR");
+    if (!args[0]) {
+      message.channel.send({embed:{
+        title: 'Error',
+        description: `Please mention the user you want to view as your arguement`,
+        color: errClr
+      }});
+      return;
+    }
+    if (args.length != 1) {
+      message.channel.send({embed:{
+        title: 'Error',
+        description: `Please mention the user you want to view as your arguement`,
+        color: errClr
+      }});
+      return;
+    }
+    let mentionedUsr = message.mentions.users.first();
+    let usrqry;
+    let errFound = false
+    for (let user in usrPoint) {
+      if (usrPoint[user].name.toUpperCase() === args[0].toUpperCase()) {
+        usrqry = userPoint[user];
+        break;
+      }
+      else if (usrPoint[user].id == args[0]) {
+        usrqry = userPoint[user];
+        break;
+      }
+      else if (mentionedUsr != undefined) {
+        if (usrPoint[user].id == mentionedUsr.id) {
+          usrqry = userPoint[user];
+          break;
+        }
+      }
+      else errFound = true;
+    }
+    if (errFound == true) {
+      message.channel.send({embed:{
+        title: 'Error',
+        description: 'Couldn\'t find the user specified',
+        color: errClr
+      }});
+      return;
+    }
+    if (!hasAdmin) {
+      message.channel.send({embed:{
+        title: 'Found user',
+        description: `Details of user ${usrqry.username}`,
+        color: trueClr,
+        fields: [{
+          name: 'Name',
+          value: usrqry.username,
+          inline: true
+        },{
+          name: 'ID',
+          value: usrqry.id,
+          inline: true
+        },{
+          name: 'Rank',
+          value: usrqry.rank,
+          inline: true
+        },{
+          name: 'Messages sent',
+          value: usrqry.messagesSent,
+          inline: true
+        }]
+      }});
+    }
+    else {
+      message.channel.send({embed:{
+        title: 'Found user',
+        description: `Details of user ${usrqry.username}`,
+        color: trueClr,
+        fields: [{
+          name: 'Name',
+          value: usrqry.username,
+          inline: true
+        },{
+          name: 'ID',
+          value: usrqry.id,
+          inline: true
+        },{
+          name: 'Rank',
+          value: usrqry.rank,
+          inline: true
+        },{
+          name: 'Messages sent',
+          value: usrqry.messagesSent,
+          inline: true
+        },{
+          name: 'Times sweared',
+          value: usrqry.sweared,
+          inline: true
+        },{
+          name: 'Verified?',
+          value: usrqry.verified,
+          inline: true
+        }]
+      }});
     }
   }
+
+  // Points system //
 
   // Verify command
   if (msg === `${prefix}VERIFY`) {
@@ -1502,11 +1611,12 @@ bot.on('message', message => {
     for (let userID in usrPoint) {
       usrPoint[userID].points = 0;
       usrPoint[userID].verified = false;
-      usrPoint[userID].rank = "Default"
+      usrPoint[userID].rank = "Default",
+      usrPoint[userID].sweared = 0;
     }
     message.channel.send({embed:{
       title: 'Operation successful!',
-      description: 'Points of all users have been reset.\nVerifications of all users have been reset.\nRanks of all users have been reset.',
+      description: 'Points of all users have been reset.\nVerifications of all users have been reset.\nRanks of all users have been reset.\nTimes sweared of all users have been reset.',
       color: trueClr
     }});
   }
