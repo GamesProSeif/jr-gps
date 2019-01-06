@@ -1458,6 +1458,14 @@ bot.on('message', message => {
 
   // Point command
   if (msg.startsWith(`${prefix}POINT`)) {
+    if (!args[0]) {
+      message.channel.send({embed:{
+        title: 'Error',
+        description: `Please use one of \`point\`\'s options, use \`${prefix}point help\``,
+        color: errClr
+      }});
+      return;
+    }
     // Add arguement
     if (args[0].toUpperCase() === `ADD`) {
       hasAdmin = message.member.hasPermission("ADMINISTRATOR");
@@ -1749,6 +1757,15 @@ bot.on('message', message => {
           value: `**Description**: Resets the all data about the user (points, ranks, times sweared, verifications, messages sent)\n**Usage**: \`${prefix}point reset\``
         }]
       }});
+    }
+
+    else {
+      message.channel.send({embed:{
+        title: 'Error',
+        description: `\`${args[0]}\` is not a valid option of \`point\``,
+        color: errClr
+      }});
+      return;
     }
   }
 
