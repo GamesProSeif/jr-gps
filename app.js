@@ -1458,7 +1458,7 @@ bot.on('message', message => {
   // Point command
   if (msg.startsWith(`${prefix}POINT`)) {
     // Add-p arguement
-    if (args[0] == (`${prefix}ADD`)) {
+    if (args[0] == `${prefix}ADD`)){
       hasAdmin = message.member.hasPermission("ADMINISTRATOR");
       if (!hasAdmin) {
         message.channel.send({embed:{
@@ -1538,7 +1538,7 @@ bot.on('message', message => {
     }
 
     // Remove-p arguement
-    else if (args[0] === (`${prefix}REMOVE`)) {
+    else if (args[0] === `${prefix}REMOVE`) {
       hasAdmin = message.member.hasPermission("ADMINISTRATOR");
       if (!hasAdmin) {
         message.channel.send({embed:{
@@ -1618,7 +1618,7 @@ bot.on('message', message => {
     }
 
     // Set-p arguement
-    else if (args[0] === `${prefix}SET`)) {
+    else if (args[0] === `${prefix}SET`) {
       hasAdmin = message.member.hasPermission("ADMINISTRATOR");
       if (!hasAdmin) {
         message.channel.send({embed:{
