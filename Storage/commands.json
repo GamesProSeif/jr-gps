@@ -23,6 +23,12 @@
     "desc":"Displays the current version of the bot",
     "usage":"version"
   },
+  "Repository": {
+    "name":"Repository",
+    "group":"User",
+    "desc":"Displays the current repository of the bot",
+    "usage":"repository"
+  },
   "User-info": {
     "name":"User-info",
     "group":"User",

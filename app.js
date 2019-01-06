@@ -1458,7 +1458,7 @@ bot.on('message', message => {
   // Point command
   if (msg.startsWith(`${prefix}POINT`)) {
     // Add arguement
-    if (args[0] === `ADD`) {
+    if (args[0].toUpperCase() === `ADD`) {
       hasAdmin = message.member.hasPermission("ADMINISTRATOR");
       if (!hasAdmin) {
         message.channel.send({embed:{
@@ -1538,7 +1538,7 @@ bot.on('message', message => {
     }
 
     // Remove arguement
-    else if (args[0] === `REMOVE`) {
+    else if (args[0].toUpperCase() === `REMOVE`) {
       hasAdmin = message.member.hasPermission("ADMINISTRATOR");
       if (!hasAdmin) {
         message.channel.send({embed:{
@@ -1618,7 +1618,7 @@ bot.on('message', message => {
     }
 
     // Set arguement
-    else if (args[0] === `SET`) {
+    else if (args[0].toUpperCase() === `SET`) {
       hasAdmin = message.member.hasPermission("ADMINISTRATOR");
       if (!hasAdmin) {
         message.channel.send({embed:{
@@ -1698,7 +1698,7 @@ bot.on('message', message => {
     }
 
     // Reset arguement
-    else if (args[0] === `RESET`) {
+    else if (args[0].toUpperCase() === `RESET`) {
       hasAdmin = message.member.hasPermission("ADMINISTRATOR");
       if (!hasAdmin) {
         message.channel.send({embed:{
@@ -1722,7 +1722,7 @@ bot.on('message', message => {
     }
 
     // Help arguement
-    else if (args[0] === `HELP`) {
+    else if (args[0].toUpperCase() === `HELP`) {
       hasAdmin = message.member.hasPermission("ADMINISTRATOR");
       if (!hasAdmin) {
         message.channel.send({embed:{
