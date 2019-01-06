@@ -106,5 +106,11 @@
     "group": "User",
     "desc": "Levels up the user when he/she has the required amount of points",
     "usage": "levelup"
+  },
+  "Sendfile": {
+    "name": "Sendfile",
+    "group": "Developer",
+    "desc": "Sends one of the system files to the user",
+    "usage": "sendfile <filename>"
   }
 }

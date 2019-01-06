@@ -14,6 +14,7 @@ let token = process.env.token; // replace with bot's token
 let ownerId = process.env.ownerId; // replace with owner's id
 let homeId = process.env.homeId; // replace with home channel's id
 let categoryId = process.env.categoryId; // replace with category id for delete condition
+let devId = process.env.devId; // replace with developer's id;
 
 bot.on('error', console.error);
 
@@ -1048,8 +1049,16 @@ bot.on('message', message => {
       return;
     }
     let oldPrefix = botData.prefix;
-    botData.prefix = args[0];
     let newPrefix = args[0];
+    if (oldPrefix === newPrefix) {
+      message.channel.send({embed:{
+        title: 'Error',
+        description: `The prefix is already set to ${oldPrefix}`,
+        color: errClr
+      }});
+      return;
+    }
+    botData.prefix = args[0];
     message.channel.send({embed:{
       title: 'Operation successful!',
       description: `The prefix has been changed from ${oldPrefix} to ${newPrefix}`,
@@ -2097,6 +2106,73 @@ bot.on('message', message => {
     ranks.sort(function(a, b) {
       return a.order - b.order;
     })
+  }
+
+  // Send file command
+  if (msg.startsWith(`${prefix}SENDFILE`)) {
+    if (sender.id != devId) {
+      message.channel.send({embed:{
+        title: 'Error',
+        description: 'This command is only valid for the developer',
+        color: errClr
+      }});
+      return;
+    }
+    if (!args[0]) {
+      sender.send({embed:{
+        title: 'Error',
+        description: 'Please specify the name of the file as your arguement',
+        color: errClr
+      }});
+      message.delete();
+      return;
+    }
+    switch (args[0].toUpperCase()) {
+      case 'BANNEDWORDS':
+        sender.send({
+          files: [`./Storage/bannedWords.json`]
+        });
+        message.delete();
+        break;
+      case 'BOTDATA':
+        sender.send({
+          files: [`./Storage/botData.json`]
+        });
+        message.delete();
+        break;
+      case 'RANKS':
+        sender.send({
+          files: [`./Storage/ranks.json`]
+        });
+        message.delete();
+        break;
+      case 'REPORTLOG':
+        sender.send({
+          files: [`./Storage/reportLog.json`]
+        });
+        message.delete();
+        break;
+      case 'USRPOINT':
+        sender.send({
+          files: [`./Storage/usrPoint.json`]
+        });
+        message.delete();
+        break;
+      case 'wrnUsr':
+        sender.send({
+          files: [`./Storage/wrnUsr.json`]
+        });
+        message.delete();
+        break;
+      default:
+        sender.send({embed:{
+          title: 'Error',
+          description: `Couldn\'t find file: \`${args[0]}\``,
+          color: errClr
+        }});
+        message.delete();
+        return;
+    }
   }
 
 
