@@ -446,7 +446,7 @@ bot.on('message', message => {
 
   // Repository command
   if (msg === `${prefix}REPOSITORY`) {
-    message.channel.send({embed:{
+    sender.send({embed:{
       description: `**BOT\'s Repository**: ${package.homepage}`,
       color: trueClr
     }});
