@@ -1732,25 +1732,23 @@ bot.on('message', message => {
         }});
       }
       message.channel.send({embed:{
-        message.channel.send({embed:{
-          title: 'Point Help',
-          color: trueClr,
-          fields: [{
-            name: 'Add',
-            value: `**Description**: Adds points to a user\n**Usage**: \`${prefix}point add <mention user> <amount>\``
-          },{
-            name: 'Remove',
-            value: `**Description**: Removes points from a user\n**Usage**: \`${prefix}point remove <mention user> <amount>\``
-          },{
-            name: 'Set',
-            value: `**Description**: Sets points of a user\n**Usage**: \`${prefix}point set <mention user> <amount>\``
-          },{
-            name: 'Reset',
-            value: `**Description**: Resets the all data about the user (points, ranks, times sweared, verifications, messages sent)\n**Usage**: \`${prefix}point reset\``
-          }]
-        }});
+        title: 'Point Help',
+        color: trueClr,
+        fields: [{
+          name: 'Add',
+          value: `**Description**: Adds points to a user\n**Usage**: \`${prefix}point add <mention user> <amount>\``
+        },{
+          name: 'Remove',
+          value: `**Description**: Removes points from a user\n**Usage**: \`${prefix}point remove <mention user> <amount>\``
+        },{
+          name: 'Set',
+          value: `**Description**: Sets points of a user\n**Usage**: \`${prefix}point set <mention user> <amount>\``
+        },{
+          name: 'Reset',
+          value: `**Description**: Resets the all data about the user (points, ranks, times sweared, verifications, messages sent)\n**Usage**: \`${prefix}point reset\``
+        }]
       }});
-  }
+    }
   }
 
   // Levelup command
