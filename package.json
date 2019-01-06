@@ -1,6 +1,6 @@
 {
   "name": "jr-jps",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "description": "This is a discord bot",
   "main": "app.js",
   "dependencies": {

@@ -8,8 +8,12 @@ let ranks = JSON.parse(fs.readFileSync('Storage/ranks.json', 'utf8'));
 let commands = JSON.parse(fs.readFileSync('Storage/commands.json', 'utf8'));
 let bannedWords = JSON.parse(fs.readFileSync('Storage/bannedWords.json', 'utf8'));
 let reportLog = JSON.parse(fs.readFileSync('Storage/reportLog.json', 'utf8'));
+let package = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
 let prefix = botData.prefix;
 let token = process.env.token; // replace with bot's token
+let ownerId = process.env.ownerId; // replace with owner's id
+let homeId = process.env.homeId; // replace with home channel's id
+let categoryId = process.env.categoryId; // replace with category id for delete condition
 
 bot.on('error', console.error);
 
@@ -74,7 +78,7 @@ bot.on('message', message => {
       }
     }
   }
-
+  // End of Profanity filter
 
 
   // Help command
@@ -430,6 +434,21 @@ bot.on('message', message => {
     }
     message.channel.send(args.join(' '));
     message.delete();
+  }
+
+  // Version command
+  if (msg === `${prefix}VERSION`) {
+    message.channel.send({embed:{
+      description: `**Version**: \`${package.version}\``,
+      color: trueClr
+    }});
+  }
+
+  // Repository command
+  if (msg === `${prefix}REPOSITORY`) {
+    message.channel.send({embed:{
+      description: `**BOT\'s Repository: ${package.repository.homepage}`
+    }});
   }
 
   // Report command
@@ -859,10 +878,10 @@ bot.on('message', message => {
 
   // Setting delete condition
   if (msg.startsWith(`${prefix}DELETEMSG`)) {
-    if (sender.id !== '336821533970399232') {
+    if (sender.id !== ownerId) {
       message.channel.send({embed:{
         title: 'Error',
-        description: 'Only PKZ can use this command',
+        description: 'Only the owner can use this command',
         color: errClr
       }});
       return;
@@ -909,10 +928,9 @@ bot.on('message', message => {
   }
 
   // Deleting messages from Wilderness
-  if (message.channel.parent.id === '522118918412697600') {
+  if (message.channel.parent.id === categoryId) {
     if (botData.deleteCondition === false) return;
-    if (sender.id === '336821533970399232') return;
-    //if (sender.id === '252829167320694784') return;
+    if (sender.id === ownerId) return;
     message.delete();
     if (!wrnUsr[sender.id]) {
       wrnUsr[sender.id] = {
@@ -925,7 +943,7 @@ bot.on('message', message => {
       // Warning the user
       if (wrnUsr[sender.id].warned === false) {
         if (wrnUsr[sender.id].messagesDeleted % 10 == 0) {
-          bot.channels.get('515798594373025803').send({embed:{
+          bot.channels.get(homeId).send({embed:{
             title: 'Alert',
             description: `User ${wrnUsr[sender.id].name} has been warned!\nReason: sending ${wrnUsr[sender.id].messagesDeleted} messages in \`Wilderness\` while development is on`,
             color: errClr
@@ -1004,10 +1022,10 @@ bot.on('message', message => {
 
   // Prefix-set command
   if (msg.startsWith(`${prefix}PREFIX-SET`)) {
-    if (sender.id != '336821533970399232') {
+    if (sender.id != ownerId) {
       message.channel.send({embed:{
         title: 'Error',
-        description: 'This command is only available for the owner',
+        description: 'Only the owner can use this command',
         color: errClr
       }});
       return;
@@ -1437,272 +1455,306 @@ bot.on('message', message => {
 
   }
 
-  // Add-p command
-  if (msg.startsWith(`${prefix}ADD-P`)) {
-    hasAdmin = message.member.hasPermission("ADMINISTRATOR");
-    if (!hasAdmin) {
-      message.channel.send({embed:{
-        title: 'Error',
-        description: 'This command is only for admins',
-        color: errClr
-      }});
-      return;
-    }
-    let mentionedUsr = message.mentions.users.first();
-    if (!args[0]) {
-      message.channel.send({embed:{
-        title: 'Error',
-        description: `Please put \`user\` as your first arguement then \`amount\``,
-        color: errClr
-      }});
-      return;
-    }
-    if (mentionedUsr == undefined) {
-      message.channel.send({embed:{
-        title: 'Error',
-        description: `\`${args[0]}\` is not a valid mentioned user`,
-        color: errClr
-      }});
-      return;
-    }
-    if (!usrPoint[mentionedUsr.id]) {
-      usrPoint[mentionedUsr.id] = {
-        "name": mentionedUsr.username,
-        "id": mentionedUsr.id,
-        "points": 0,
-        "verified": false,
-        "rank": "Default",
-        "messagesSent": 0,
-        "sweared": 0
+  // Point command
+  if (msg.startsWith(`${prefix}POINT`)) {
+    // Add-p arguement
+    if (args[0] == (`${prefix}ADD`)) {
+      hasAdmin = message.member.hasPermission("ADMINISTRATOR");
+      if (!hasAdmin) {
+        message.channel.send({embed:{
+          title: 'Error',
+          description: 'This command is only for admins',
+          color: errClr
+        }});
+        return;
       }
-    }
-    if (!args[args.length - 1]) {
-      message.channel.send({embed:{
-        title: 'Error',
-        description: 'Please specify the number of points to be added as your arguement',
-        color: errClr
-      }});
-      return;
-    }
-    if (isNaN(args[args.length - 1])) {
-      message.channel.send({embed:{
-        title: 'Error',
-        description: `\`${args[args.length - 1]}\` is not a valid number`,
-        color: errClr
-      }});
-      return;
-    }
-    if (parseFloat(args[args.length - 1]) < 0) {
-      message.channel.send({embed:{
-        title: 'Error',
-        description: 'Cannot add a negative number',
-        color: errClr
-      }});
-      return;
-    }
-    if (!Number.isInteger(parseFloat(args[args.length - 1]))) {
-      message.channel.send({embed:{
-        title: 'Error',
-        description: `Cannot add a decimal number`,
-        color: errClr
-      }});
-      return;
-    }
-    usrPoint[mentionedUsr.id].points += parseInt(args[args.length - 1]);
-    message.channel.send({embed:{
-      title: 'Operation successful!',
-      description: `Added \`${args[args.length - 1]}\` to ${mentionedUsr.username}\'s account\nCurrent balance: \`${usrPoint[mentionedUsr.id].points}\``,
-      color: trueClr
-    }});
-    message.delete();
-  }
-
-  // Remove-p command
-  if (msg.startsWith(`${prefix}REMOVE-P`)) {
-    hasAdmin = message.member.hasPermission("ADMINISTRATOR");
-    if (!hasAdmin) {
-      message.channel.send({embed:{
-        title: 'Error',
-        description: 'This command is only for admins',
-        color: errClr
-      }});
-      return;
-    }
-    let mentionedUsr = message.mentions.users.first();
-    if (!args[0]) {
-      message.channel.send({embed:{
-        title: 'Error',
-        description: `Please put \`user\` as your first arguement then \`amount\``,
-        color: errClr
-      }});
-      return;
-    }
-    if (mentionedUsr == undefined) {
-      message.channel.send({embed:{
-        title: 'Error',
-        description: `\`${args[0]}\` is not a valid mentioned user`,
-        color: errClr
-      }});
-      return;
-    }
-    if (!usrPoint[mentionedUsr.id]) {
-      usrPoint[mentionedUsr.id] = {
-        "name": mentionedUsr.username,
-        "id": mentionedUsr.id,
-        "points": 0,
-        "verified": false,
-        "rank": "Default",
-        "messagesSent": 0,
-        "sweared": 0
+      let mentionedUsr = message.mentions.users.first();
+      if (!args[1]) {
+        message.channel.send({embed:{
+          title: 'Error',
+          description: `Please put \`user\` as your second arguement then \`amount\``,
+          color: errClr
+        }});
+        return;
       }
-    }
-    if (!args[args.length - 1]) {
-      message.channel.send({embed:{
-        title: 'Error',
-        description: 'Please specify the number of points to be removed as your arguement',
-        color: errClr
-      }});
-      return;
-    }
-    if (isNaN(args[args.length - 1])) {
-      message.channel.send({embed:{
-        title: 'Error',
-        description: `\`${args[args.length - 1]}\` is not a valid number`,
-        color: errClr
-      }});
-      return;
-    }
-    if (parseFloat(args[args.length - 1]) < 0) {
-      message.channel.send({embed:{
-        title: 'Error',
-        description: 'Cannot remove a negative number',
-        color: errClr
-      }});
-      return;
-    }
-    if (!Number.isInteger(parseFloat(args[args.length - 1]))) {
-      message.channel.send({embed:{
-        title: 'Error',
-        description: `Cannot remove a decimal number`,
-        color: errClr
-      }});
-      return;
-    }
-    usrPoint[mentionedUsr.id].points -= parseInt(args[args.length - 1]);
-    message.channel.send({embed:{
-      title: 'Operation successful!',
-      description: `Removed \`${args[args.length - 1]}\` from ${mentionedUsr.username}\'s account\nCurrent balance: \`${usrPoint[mentionedUsr.id].points}\``,
-      color: trueClr
-    }});
-    message.delete();
-  }
-
-  // Set-p command
-  if (msg.startsWith(`${prefix}SET-P`)) {
-    hasAdmin = message.member.hasPermission("ADMINISTRATOR");
-    if (!hasAdmin) {
-      message.channel.send({embed:{
-        title: 'Error',
-        description: 'This command is only for admins',
-        color: errClr
-      }});
-      return;
-    }
-    let mentionedUsr = message.mentions.users.first();
-    if (!args[0]) {
-      message.channel.send({embed:{
-        title: 'Error',
-        description: `Please put \`user\` as your first arguement then \`amount\``,
-        color: errClr
-      }});
-      return;
-    }
-    if (mentionedUsr == undefined) {
-      message.channel.send({embed:{
-        title: 'Error',
-        description: `\`${args[0]}\` is not a valid mentioned user`,
-        color: errClr
-      }});
-      return;
-    }
-    if (!usrPoint[mentionedUsr.id]) {
-      usrPoint[mentionedUsr.id] = {
-        "name": mentionedUsr.username,
-        "id": mentionedUsr.id,
-        "points": 0,
-        "verified": false,
-        "rank": "Default",
-        "messagesSent": 0,
-        "sweared": 0
+      if (mentionedUsr == undefined) {
+        message.channel.send({embed:{
+          title: 'Error',
+          description: `\`${args[1]}\` is not a valid mentioned user`,
+          color: errClr
+        }});
+        return;
       }
-    }
-    if (!args[args.length - 1]) {
+      if (!usrPoint[mentionedUsr.id]) {
+        usrPoint[mentionedUsr.id] = {
+          "name": mentionedUsr.username,
+          "id": mentionedUsr.id,
+          "points": 0,
+          "verified": false,
+          "rank": "Default",
+          "messagesSent": 0,
+          "sweared": 0
+        }
+      }
+      if (!args[args.length - 1]) {
+        message.channel.send({embed:{
+          title: 'Error',
+          description: 'Please specify the number of points to be added as your third arguement',
+          color: errClr
+        }});
+        return;
+      }
+      if (isNaN(args[args.length - 1])) {
+        message.channel.send({embed:{
+          title: 'Error',
+          description: `\`${args[args.length - 1]}\` is not a valid number`,
+          color: errClr
+        }});
+        return;
+      }
+      if (parseFloat(args[args.length - 1]) < 0) {
+        message.channel.send({embed:{
+          title: 'Error',
+          description: 'Cannot add a negative number',
+          color: errClr
+        }});
+        return;
+      }
+      if (!Number.isInteger(parseFloat(args[args.length - 1]))) {
+        message.channel.send({embed:{
+          title: 'Error',
+          description: `Cannot add a decimal number`,
+          color: errClr
+        }});
+        return;
+      }
+      usrPoint[mentionedUsr.id].points += parseInt(args[args.length - 1]);
       message.channel.send({embed:{
-        title: 'Error',
-        description: 'Please specify the number of points to be set as your arguement',
-        color: errClr
+        title: 'Operation successful!',
+        description: `Added \`${args[args.length - 1]}\` to ${mentionedUsr.username}\'s account\nCurrent balance: \`${usrPoint[mentionedUsr.id].points}\``,
+        color: trueClr
       }});
-      return;
+      message.delete();
     }
-    if (isNaN(args[args.length - 1])) {
-      message.channel.send({embed:{
-        title: 'Error',
-        description: `\`${args[args.length - 1]}\` is not a valid number`,
-        color: errClr
-      }});
-      return;
-    }
-    if (parseFloat(args[args.length - 1]) < 0) {
-      message.channel.send({embed:{
-        title: 'Error',
-        description: 'Cannot set a negative number',
-        color: errClr
-      }});
-      return;
-    }
-    if (!Number.isInteger(parseFloat(args[args.length - 1]))) {
-      message.channel.send({embed:{
-        title: 'Error',
-        description: `Cannot set a decimal number`,
-        color: errClr
-      }});
-      return;
-    }
-    usrPoint[mentionedUsr.id].points = parseInt(args[args.length - 1]);
-    message.channel.send({embed:{
-      title: 'Operation successful!',
-      description: `${mentionedUsr.username}\'s account has been set to \`${args[args.length - 1]}\``,
-      color: trueClr
-    }});
-    message.delete();
-  }
 
-  // Reset-p command
-  if (msg === `${prefix}RESET-P`) {
-    hasAdmin = message.member.hasPermission("ADMINISTRATOR");
-    if (!hasAdmin) {
+    // Remove-p arguement
+    else if (args[0] === (`${prefix}REMOVE`)) {
+      hasAdmin = message.member.hasPermission("ADMINISTRATOR");
+      if (!hasAdmin) {
+        message.channel.send({embed:{
+          title: 'Error',
+          description: 'This command is only for admins',
+          color: errClr
+        }});
+        return;
+      }
+      let mentionedUsr = message.mentions.users.first();
+      if (!args[1]) {
+        message.channel.send({embed:{
+          title: 'Error',
+          description: `Please put \`user\` as your second arguement then \`amount\``,
+          color: errClr
+        }});
+        return;
+      }
+      if (mentionedUsr == undefined) {
+        message.channel.send({embed:{
+          title: 'Error',
+          description: `\`${args[1]}\` is not a valid mentioned user`,
+          color: errClr
+        }});
+        return;
+      }
+      if (!usrPoint[mentionedUsr.id]) {
+        usrPoint[mentionedUsr.id] = {
+          "name": mentionedUsr.username,
+          "id": mentionedUsr.id,
+          "points": 0,
+          "verified": false,
+          "rank": "Default",
+          "messagesSent": 0,
+          "sweared": 0
+        }
+      }
+      if (!args[args.length - 1]) {
+        message.channel.send({embed:{
+          title: 'Error',
+          description: 'Please specify the number of points to be removed as your third arguement arguement',
+          color: errClr
+        }});
+        return;
+      }
+      if (isNaN(args[args.length - 1])) {
+        message.channel.send({embed:{
+          title: 'Error',
+          description: `\`${args[args.length - 1]}\` is not a valid number`,
+          color: errClr
+        }});
+        return;
+      }
+      if (parseFloat(args[args.length - 1]) < 0) {
+        message.channel.send({embed:{
+          title: 'Error',
+          description: 'Cannot remove a negative number',
+          color: errClr
+        }});
+        return;
+      }
+      if (!Number.isInteger(parseFloat(args[args.length - 1]))) {
+        message.channel.send({embed:{
+          title: 'Error',
+          description: `Cannot remove a decimal number`,
+          color: errClr
+        }});
+        return;
+      }
+      usrPoint[mentionedUsr.id].points -= parseInt(args[args.length - 1]);
       message.channel.send({embed:{
-        title: 'Error',
-        description: 'This command is only for admins',
-        color: errClr
+        title: 'Operation successful!',
+        description: `Removed \`${args[args.length - 1]}\` from ${mentionedUsr.username}\'s account\nCurrent balance: \`${usrPoint[mentionedUsr.id].points}\``,
+        color: trueClr
       }});
-      return;
+      message.delete();
     }
-    for (let userID in usrPoint) {
-      usrPoint[userID].points = 0;
-      usrPoint[userID].verified = false;
-      usrPoint[userID].rank = "Default",
-      usrPoint[userID].sweared = 0
+
+    // Set-p arguement
+    else if (args[0] === `${prefix}SET`)) {
+      hasAdmin = message.member.hasPermission("ADMINISTRATOR");
+      if (!hasAdmin) {
+        message.channel.send({embed:{
+          title: 'Error',
+          description: 'This command is only for admins',
+          color: errClr
+        }});
+        return;
+      }
+      let mentionedUsr = message.mentions.users.first();
+      if (!args[1]) {
+        message.channel.send({embed:{
+          title: 'Error',
+          description: `Please put \`user\` as your second arguement then \`amount\``,
+          color: errClr
+        }});
+        return;
+      }
+      if (mentionedUsr == undefined) {
+        message.channel.send({embed:{
+          title: 'Error',
+          description: `\`${args[1]}\` is not a valid mentioned user`,
+          color: errClr
+        }});
+        return;
+      }
+      if (!usrPoint[mentionedUsr.id]) {
+        usrPoint[mentionedUsr.id] = {
+          "name": mentionedUsr.username,
+          "id": mentionedUsr.id,
+          "points": 0,
+          "verified": false,
+          "rank": "Default",
+          "messagesSent": 0,
+          "sweared": 0
+        }
+      }
+      if (!args[args.length - 1]) {
+        message.channel.send({embed:{
+          title: 'Error',
+          description: 'Please specify the number of points to be set as your third arguement arguement',
+          color: errClr
+        }});
+        return;
+      }
+      if (isNaN(args[args.length - 1])) {
+        message.channel.send({embed:{
+          title: 'Error',
+          description: `\`${args[args.length - 1]}\` is not a valid number`,
+          color: errClr
+        }});
+        return;
+      }
+      if (parseFloat(args[args.length - 1]) < 0) {
+        message.channel.send({embed:{
+          title: 'Error',
+          description: 'Cannot set a negative number',
+          color: errClr
+        }});
+        return;
+      }
+      if (!Number.isInteger(parseFloat(args[args.length - 1]))) {
+        message.channel.send({embed:{
+          title: 'Error',
+          description: `Cannot set a decimal number`,
+          color: errClr
+        }});
+        return;
+      }
+      usrPoint[mentionedUsr.id].points = parseInt(args[args.length - 1]);
+      message.channel.send({embed:{
+        title: 'Operation successful!',
+        description: `${mentionedUsr.username}\'s account has been set to \`${args[args.length - 1]}\``,
+        color: trueClr
+      }});
+      message.delete();
     }
-    message.channel.send({embed:{
-      title: 'Operation successful!',
-      description: 'Points of all users have been reset.\nVerifications of all users have been reset.\nRanks of all users have been reset.\nTimes sweared of all users have been reset.',
-      color: trueClr
-    }});
+
+    // Reset-p arguement
+    else if (args[0] === `${prefix}RESET`) {
+      hasAdmin = message.member.hasPermission("ADMINISTRATOR");
+      if (!hasAdmin) {
+        message.channel.send({embed:{
+          title: 'Error',
+          description: 'This command is only for admins',
+          color: errClr
+        }});
+        return;
+      }
+      for (let userID in usrPoint) {
+        usrPoint[userID].points = 0;
+        usrPoint[userID].verified = false;
+        usrPoint[userID].rank = "Default",
+        usrPoint[userID].sweared = 0
+      }
+      message.channel.send({embed:{
+        title: 'Operation successful!',
+        description: 'Points of all users have been reset.\nVerifications of all users have been reset.\nRanks of all users have been reset.\nTimes sweared of all users have been reset.',
+        color: trueClr
+      }});
+    }
+
+    // Help arguement
+    else if (args[0] === `${prefix}HELP`) {
+      hasAdmin = message.member.hasPermission("ADMINISTRATOR");
+      if (!hasAdmin) {
+        message.channel.send({embed:{
+          title: 'Error',
+          description: 'This command is only for admins',
+          color: errClr
+        }});
+      }
+      message.channel.send({embed:{
+        message.channel.send({embed:{
+          title: 'Point Help',
+          color: trueClr,
+          fields: [{
+            name: 'Add',
+            value: `**Description**: Adds points to a user\n**Usage**: \`${prefix}point add <mention user> <amount>\``
+          },{
+            name: 'Remove',
+            value: `**Description**: Removes points from a user\n**Usage**: \`${prefix}point remove <mention user> <amount>\``
+          },{
+            name: 'Set',
+            value: `**Description**: Sets points of a user\n**Usage**: \`${prefix}point set <mention user> <amount>\``
+          },{
+            name: 'Reset',
+            value: `**Description**: Resets the all data about the user (points, ranks, times sweared, verifications, messages sent)\n**Usage**: \`${prefix}point reset\``
+          }]
+        }});
+      }});
+  }
   }
 
   // Levelup command
-  if (msg === `${prefix}LEVELUP`) {
+  if (msg === `${prefix}LEVELUP` || msg === `${prefix}RANKUP`) {
     let currentRank = usrPoint[sender.id].rank;
     let currentPoints = usrPoint[sender.id].points;
     let nextRank;
@@ -1742,7 +1794,7 @@ bot.on('message', message => {
   }
 
   // Rank command
-  if (msg.startsWith(`${prefix}RANK`)) {
+  if (msg.startsWith(`${prefix}RANK `)) {
     let msgCont = msg.split(" ")
     if (msgCont[0] != `${prefix}RANK`) return;
     if (!args[0]) {
@@ -2003,7 +2055,7 @@ bot.on('message', message => {
         color: trueClr,
         fields: [{
           name: 'Add',
-          value: `**Description**: Adds a new rank to the ranks list\n**Note**: When a new rank is added, please use \`${prefix}reset-p\` to reset the points and the ranks for all users\n**Usage**: \`${prefix}rank add <Name> <required points> <order>\``
+          value: `**Description**: Adds a new rank to the ranks list\n**Usage**: \`${prefix}rank add <Name> <required points> <order>\``
         },{
           name: 'Remove',
           value: `**Description**: Removes a rank from the ranks list\n**Note**: When a rank is removed, please use \`${prefix}reset-p\` to reset the points and the ranks for all users\n**Usage**: \`${prefix}rank remove <Name>\``

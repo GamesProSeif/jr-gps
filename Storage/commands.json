@@ -17,6 +17,12 @@
     "desc":"Says a message",
     "usage":"say <message>"
   },
+  "Version": {
+    "name":"Version",
+    "group":"User",
+    "desc":"Displays the current version of the bot",
+    "usage":"version"
+  },
   "User-info": {
     "name":"User-info",
     "group":"User",
@@ -47,23 +53,11 @@
     "desc":"Shows the points and rank of the user or other user specified",
     "usage":"sp [mention-user]"
   },
-  "Add-p": {
-    "name":"Add-p",
+  "Point": {
+    "name":"Point",
     "group":"Admin",
-    "desc":"Adds points to a user",
-    "usage":"add-p <mention-user> <points>"
-  },
-  "Remove-p": {
-    "name":"Remove-p",
-    "group":"Admin",
-    "desc":"Removes points from a user",
-    "usage":"remove-p <mention-user> <points>"
-  },
-  "Set-p": {
-    "name":"Set-p",
-    "group":"Admin",
-    "desc":"Sets points of a user",
-    "usage":"set-p <mention-user> <points>"
+    "desc":"Does various functions on points of users",
+    "usage":"point <add/remove/set/reset/help>"
   },
   "Prefix-set": {
     "name":"Prefix-set",
@@ -98,7 +92,7 @@
   "Rank": {
     "name": "Rank",
     "group": "Admin",
-    "desc": "Does different functions on ranks",
+    "desc": "Does functions functions on ranks",
     "usage": "rank <add/remove/list>"
   },
   "Levelup": {
