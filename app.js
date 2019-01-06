@@ -850,15 +850,15 @@ bot.on('message', message => {
     if (parseFloat(args[0]) < 1) {
       message.channel.send({embed:{
         title: 'Error',
-        description: `Please choose a number from 1 to 33 as your arguement`,
+        description: `Please choose a number from 1 to 40 as your arguement`,
         color: errClr
       }});
       return;
     }
-    if (parseFloat(args[0]) > 33) {
+    if (parseFloat(args[0]) > 40) {
       message.channel.send({embed:{
         title: 'Error',
-        description: `Please choose a number from 1 to 33 as your arguement`,
+        description: `Please choose a number from 1 to 40 as your arguement`,
         color: errClr
       }});
       return;
