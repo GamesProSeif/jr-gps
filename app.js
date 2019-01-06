@@ -1458,7 +1458,7 @@ bot.on('message', message => {
   // Point command
   if (msg.startsWith(`${prefix}POINT`)) {
     // Add-p arguement
-    if (args[0] == `${prefix}ADD`)){
+    if (args[0] == `${prefix}ADD`) {
       hasAdmin = message.member.hasPermission("ADMINISTRATOR");
       if (!hasAdmin) {
         message.channel.send({embed:{
