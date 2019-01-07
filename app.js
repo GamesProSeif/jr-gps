@@ -46,6 +46,8 @@ bot.on('message', message => {
   }
   for (let m = 0; m < ipArr.length; m++) {
     for (let n = 0; n < serverMsg.length; n++) {
+      console.log(serverMsg[n]);
+      console.log(ipArr[m]);
       if (serverMsg[n] == ipArr[m].toString()) {
         message.delete();
         return;
