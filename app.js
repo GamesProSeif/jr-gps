@@ -14,7 +14,8 @@ let token = process.env.token; // replace with bot's token
 let ownerId = process.env.ownerId; // replace with owner's id
 let homeId = process.env.homeId; // replace with home channel's id
 let categoryId = process.env.categoryId; // replace with category id for delete condition
-let devId = process.env.devId; // replace with developer's id;
+let devId = process.env.devId; // replace with developer's id
+
 
 bot.on('error', console.error);
 
@@ -34,6 +35,16 @@ bot.on('message', message => {
   let capitalize = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1).toString().toLowerCase();
   }
+
+  let serverIp = process.env.serverIp; // special server ip
+  let ipArr = serverIp.split('.');
+  for (let m = 0; m < ipArr; m++) {
+    if (msg.includes(ipArr[m].toString())) {
+      message.delete();
+      return;
+    }
+  }
+
 
   if (sender.id == process.env.botId) return; // replace with bot's ID
   if (sender.bot) return;
@@ -207,12 +218,8 @@ bot.on('message', message => {
         title: 'Terraria Server Info',
         fields: [
           {
-            name: 'IP',
-            value: botData.server.ip,
-          },
-          {
             name: 'PORT',
-            value: botData.server.port,
+            value: '7777',
             "inline": true
           },
           {
@@ -232,10 +239,13 @@ bot.on('message', message => {
       if (args[0].toUpperCase() === 'IP') {
         message.channel.send({embed:{
           title: 'Terraria Server Info',
+          image: {
+            "url": "https://cdn.discordapp.com/attachments/529663886333575169/531748703980224542/unknown.png"
+          },
           fields: [
             {
               name: 'IP',
-              value: botData.server.ip,
+              value: 'Currently disabled',
             }],
           color: trueClr
         }});
@@ -246,7 +256,7 @@ bot.on('message', message => {
           fields: [
             {
               name: 'PORT',
-              value: botData.server.port,
+              value: '7777',
             }],
           color: trueClr
         }});
@@ -274,7 +284,12 @@ bot.on('message', message => {
         }});
       }
       if (args[0].toUpperCase() === 'SET') {
-        if (sender.id !== '336821533970399232') {
+        message.channel.send({embed:{
+          description: 'This command is currently disabled',
+          color: errClr
+        }});
+        return;
+        /*if (sender.id !== '336821533970399232') {
           message.channel.send({embed:{
             title: 'Error',
             description: 'This command is only available for the owner',
@@ -392,7 +407,7 @@ bot.on('message', message => {
             description: `PORT of the Terraria server has been set to ${args[2]}`,
             color: trueClr
           }});
-        }
+        }*/
       }
     }
 
