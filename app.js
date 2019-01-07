@@ -37,8 +37,9 @@ bot.on('message', message => {
   }
 
   let serverIp = process.env.serverIp; // special server ip
-  let ipArr = serverIp.split('.');
-  for (let m = 0; m < ipArr; m++) {
+  let ipArr = [];
+  ipArr = serverIp.split('.');
+  for (let m = 0; m < ipArr.length; m++) {
     if (msg.includes(ipArr[m].toString())) {
       message.delete();
       return;
@@ -239,14 +240,10 @@ bot.on('message', message => {
       if (args[0].toUpperCase() === 'IP') {
         message.channel.send({embed:{
           title: 'Terraria Server Info',
+          description: '**IP**',
           image: {
             "url": "https://cdn.discordapp.com/attachments/529663886333575169/531748703980224542/unknown.png"
           },
-          fields: [
-            {
-              name: 'IP',
-              value: 'Currently disabled',
-            }],
           color: trueClr
         }});
       }
