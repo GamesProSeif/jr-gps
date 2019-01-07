@@ -38,10 +38,11 @@ bot.on('message', message => {
 
   let serverIp = process.env.serverIp; // special server ip
   let ipArr = serverIp.split('.');
-  let serverMsg = msg.split(' ');
+  let serverMsg = msg;
+  serverMsg.split(' ');
   for (let m = 0; m < ipArr.length; m++) {
     for (let n = 0; n < serverMsg.length; n++) {
-      if (serverMsg[n] == ipArr[m].toString()) {
+      if (serverMsg[n] == ipArr[m].toString() || serverMsg[n] == serverIp) {
         message.delete();
         return;
       }
