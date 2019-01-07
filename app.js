@@ -40,15 +40,13 @@ bot.on('message', message => {
   let ipArr = serverIp.split('.');
   let serverMsg = msg;
   serverMsg.split(' ');
-  console.log(serverMsg);
-  console.log(ipArr);
+  if (serverMsg.join('.').includes(serverIp.toString())) {
+    message.delete();
+    return;
+  }
   for (let m = 0; m < ipArr.length; m++) {
     for (let n = 0; n < serverMsg.length; n++) {
       if (serverMsg[n] == ipArr[m].toString()) {
-        message.delete();
-        return;
-      }
-      else if (serverMsg[n] == serverIp.toString()) {
         message.delete();
         return;
       }
