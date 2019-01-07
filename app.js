@@ -40,7 +40,7 @@ bot.on('message', message => {
   let ipArr = serverIp.split('.');
   let serverMsg = msg;
   serverMsg.split(' ');
-  if (serverMsg.join('.').includes(serverIp.toString())) {
+  if (msg.includes(serverIp.toString())) {
     message.delete();
     return;
   }
