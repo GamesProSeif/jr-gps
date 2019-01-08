@@ -1451,13 +1451,13 @@ bot.on('message', message => {
       }
     }
     else {
-      mutedUser = bot.users.find(user => user.username === args[0]);
+      mutedUser = bot.users.find(user => user.username === args.join(' ');
       if (!mutedUser) {
-        mutedUser = bot.users.find(user => user.nickname === args[0]);
+        mutedUser = bot.users.find(user => user.nickname === args.join(' ');
         if (!mutedUser) {
           message.channel.send({embed:{
             title: 'Error',
-            description: `Couldn\'t find user with name \`${args[0]}\``,
+            description: `Couldn\'t find user with name \`${args.join(' '}\``,
             color: errClr
           }});
           return;
