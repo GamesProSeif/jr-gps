@@ -1419,6 +1419,58 @@ bot.on('message', message => {
     }
   }
 
+  // Mute command
+  if (msg.startsWith(`${prefix}MUTE`)) {
+    hasAdmin = message.member.hasPermission("ADMINISTRATOR");
+    if (!hasAdmin) {
+      message.channel.send({embed:{
+        title:'Error',
+        description:'This command is only for admins',
+        color: errClr,
+      }});
+      return;
+    }
+    if (!args[0]) {
+      message.channel.send({embed:{
+        title: 'Error',
+        description: 'Please specify the user to mute as your arguement',
+        color: errClr
+      }});
+      return;
+    }
+    let mutedUser;
+    if (isNaN(args[0])) {
+      mutedUser = bot.users.get(args[0]);
+      if (!mutedUser) {
+        message.channel.send({embed:{
+          title: 'Error',
+          description: `Couldn\`t find user with ID \`${args[0]}\``,
+          color: errClr
+        }});
+        return;
+      }
+    }
+    else {
+      mutedUser = bot.users.find(user => user.name === args[0]);
+      if (!mutedUser) {
+        mutedUser = bot.users.find(user => user.nickname === args[0]);
+        if (!mutedUser) {
+          message.channel.send({embed:{
+            title: 'Error',
+            description: `Couldn\`t find user with name \`${args[0]}\``,
+            color: errClr
+          }});
+          return;
+        }
+      }
+    }
+    message.channel.send({embed:{
+      title: 'Found user',
+      description: `**Name**: ${mutedUser.name}\n**ID**: ${mutedUser.id}`,
+      color: trueClr
+    }});
+  }
+
   // Points system //
 
   // Verify command
