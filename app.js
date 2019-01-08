@@ -1451,7 +1451,7 @@ bot.on('message', message => {
       }
     }
     else {
-      mutedUser = bot.users.find(user => user.name === args[0]);
+      mutedUser = bot.users.find(user => user.username === args[0]);
       if (!mutedUser) {
         mutedUser = bot.users.find(user => user.nickname === args[0]);
         if (!mutedUser) {
@@ -1466,7 +1466,7 @@ bot.on('message', message => {
     }
     message.channel.send({embed:{
       title: 'Found user',
-      description: `**Name**: ${mutedUser.name}\n**ID**: ${mutedUser.id}`,
+      description: `**Name**: ${mutedUser.username}\n**ID**: ${mutedUser.id}`,
       color: trueClr
     }});
   }
