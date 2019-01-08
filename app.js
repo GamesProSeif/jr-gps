@@ -1439,12 +1439,12 @@ bot.on('message', message => {
       return;
     }
     let mutedUser;
-    if (isNaN(args[0])) {
+    if (!isNaN(args[0])) {
       mutedUser = bot.users.get(args[0]);
       if (!mutedUser) {
         message.channel.send({embed:{
           title: 'Error',
-          description: `Couldn\`t find user with ID \`${args[0]}\``,
+          description: `Couldn\'t find user with ID \`${args[0]}\``,
           color: errClr
         }});
         return;
@@ -1457,7 +1457,7 @@ bot.on('message', message => {
         if (!mutedUser) {
           message.channel.send({embed:{
             title: 'Error',
-            description: `Couldn\`t find user with name \`${args[0]}\``,
+            description: `Couldn\'t find user with name \`${args[0]}\``,
             color: errClr
           }});
           return;
