@@ -1452,9 +1452,9 @@ bot.on('message', message => {
     }
     else {
       let name = args[1] ? args.join(' ') : args[0];
-      mutedUser = bot.users.find(user => user.username === name;
+      mutedUser = bot.users.find(user => user.username === name);
       if (!mutedUser) {
-        mutedUser = bot.users.find(user => user.nickname === name;
+        mutedUser = bot.users.find(user => user.nickname === name);
         if (!mutedUser) {
           message.channel.send({embed:{
             title: 'Error',
