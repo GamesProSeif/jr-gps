@@ -1457,7 +1457,7 @@ bot.on('message', message => {
         if (!mutedUser) {
           message.channel.send({embed:{
             title: 'Error',
-            description: `Couldn\'t find user with name \`${args.join(' '}\``,
+            description: `Couldn\'t find user with name \`${args.join(' ')}\``,
             color: errClr
           }});
           return;
