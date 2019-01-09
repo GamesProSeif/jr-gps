@@ -1465,7 +1465,6 @@ bot.on('message', message => {
         }
       }
     }
-    console.dir(mutedUser);
     message.channel.send({embed:{
       title: 'Found user',
       description: `**Name**: ${mutedUser.username}\n**ID**: ${mutedUser.id}`,
