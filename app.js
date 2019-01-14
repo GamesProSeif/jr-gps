@@ -1433,43 +1433,58 @@ bot.on('message', message => {
     if (!args[0]) {
       message.channel.send({embed:{
         title: 'Error',
-        description: 'Please specify the user to mute as your arguement',
+        description: `Please specify the user to mute as your first arguement`,
         color: errClr
       }});
       return;
     }
-    let mutedUser;
-    if (!isNaN(args[0])) {
-      mutedUser = bot.users.get(args[0]);
-      if (!mutedUser) {
-        message.channel.send({embed:{
-          title: 'Error',
-          description: `Couldn\'t find user with ID \`${args[0]}\``,
-          color: errClr
-        }});
-        return;
+    let name = args[1] ? args.join(' ') : args[0];
+    let user = message.guild.member(message.mentions.users.first()) || message.guild.member(bot.users.get(args[0])) || message.guild.member(bot.users.find(user => user.username === name));
+    if (!user) {
+      message.channel.send({embed:{
+        title: 'Error',
+        description: `Couldn\'t find user \`${name}\``,
+        color: errClr
+      }});
+      return;
+    }
+
+    let role = message.guild.roles.find(r => r.name === "GPS Muted");
+    if (!role) {
+      try {
+        role = message.guild.createRole({
+          name: "GPS Muted",
+          color: "#000000",
+          permissions: []
+        });
+
+        message.guild.channels.forEach(async(channel, id) => {
+          await channel.overwritePermissions(role, {
+            "SEND_MESSAGES": false,
+            "ADD_REACTIONS": false
+          });
+        })
+      } catch(e) {
+        console.log(e.stack);
       }
     }
-    else {
-      let name = args[1] ? args.join(' ') : args[0];
-      mutedUser = bot.users.find(user => user.username === name);
-      if (!mutedUser) {
-        mutedUser = bot.users.find(user => user.nickname === name);
-        if (!mutedUser) {
-          message.channel.send({embed:{
-            title: 'Error',
-            description: `Couldn\'t find user with name \`${name}\``,
-            color: errClr
-          }});
-          return;
-        }
-      }
+
+    if(user.roles.has(role.id)) {
+      message.channel.send({embed:{
+        title: 'Error',
+        description: `User \`${user.user.username}\` is already muted`,
+        color: errClr
+      }});
+      return;
     }
+
+    await user.addRole(role);
     message.channel.send({embed:{
-      title: 'Found user',
-      description: `**Name**: ${mutedUser.username}\n**ID**: ${mutedUser.id}`,
+      title: 'Operation successful',
+      description: `Muted user \`${user.user.username}\``,
       color: trueClr
     }});
+
   }
 
   // Points system //
