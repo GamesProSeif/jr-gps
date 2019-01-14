@@ -1420,7 +1420,7 @@ bot.on('message', message => {
   }
 
   // Mute command
-  if (msg.startsWith(`${prefix}MUTE`)) {
+  /*if (msg.startsWith(`${prefix}MUTE`)) {
     hasAdmin = message.member.hasPermission("ADMINISTRATOR");
     if (!hasAdmin) {
       message.channel.send({embed:{
@@ -1487,7 +1487,7 @@ bot.on('message', message => {
       }});
     }
     f();
-  }
+  }*/
 
   // Points system //
 
