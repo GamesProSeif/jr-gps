@@ -1447,7 +1447,6 @@ bot.on('message', message => {
         color: errClr
       }});
       return;
-<<<<<<< HEAD
     }
 
     async function f() {
@@ -1488,46 +1487,6 @@ bot.on('message', message => {
       }});
     }
     f();
-=======
-    }
-
-    let role = message.guild.roles.find(r => r.name === "GPS Muted");
-    if (!role) {
-      try {
-        role = message.guild.createRole({
-          name: "GPS Muted",
-          color: "#000000",
-          permissions: []
-        });
-
-        message.guild.channels.forEach(async(channel, id) => {
-          await channel.overwritePermissions(role, {
-            "SEND_MESSAGES": false,
-            "ADD_REACTIONS": false
-          });
-        })
-      } catch(e) {
-        console.log(e.stack);
-      }
-    }
-
-    if(user.roles.has(role.id)) {
-      message.channel.send({embed:{
-        title: 'Error',
-        description: `User \`${user.user.username}\` is already muted`,
-        color: errClr
-      }});
-      return;
-    }
-
-    await user.addRole(role);
-    message.channel.send({embed:{
-      title: 'Operation successful',
-      description: `Muted user \`${user.user.username}\``,
-      color: trueClr
-    }});
-
->>>>>>> 5196dfcbeb5c892a42ef1f8d1d8a8d822d542bac
   }
 
   // Points system //
