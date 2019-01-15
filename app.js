@@ -1420,76 +1420,6 @@ bot.on('message', message => {
   }
 
   // Mute command
-  /*if (msg.startsWith(`${prefix}MUTE`)) {
-    hasAdmin = message.member.hasPermission("ADMINISTRATOR");
-    if (!hasAdmin) {
-      message.channel.send({embed:{
-        title:'Error',
-        description:'This command is only for admins',
-        color: errClr,
-      }});
-      return;
-    }
-    if (!args[0]) {
-      message.channel.send({embed:{
-        title: 'Error',
-        description: `Please specify the user to mute as your first arguement`,
-        color: errClr
-      }});
-      return;
-    }
-    let name = args[1] ? args.join(' ') : args[0];
-    let user = message.guild.member(message.mentions.users.first()) || message.guild.member(bot.users.get(args[0])) || message.guild.member(bot.users.find(user => user.username === name));
-    if (!user) {
-      message.channel.send({embed:{
-        title: 'Error',
-        description: `Couldn\'t find user \`${name}\``,
-        color: errClr
-      }});
-      return;
-    }
-
-    async function f() {
-      let role = message.guild.roles.find(r => r.name === "GPS Muted");
-      if (!role) {
-        try {
-          role = message.guild.createRole({
-            name: "GPS Muted",
-            color: "#000000",
-            permissions: []
-          });
-
-          message.guild.channels.forEach(async(channel, id) => {
-            await channel.overwritePermissions(role, {
-              "SEND_MESSAGES": false,
-              "ADD_REACTIONS": false
-            });
-          })
-        } catch(e) {
-          console.log(e.stack);
-        }
-      }
-
-      if(user.roles.has(role.id)) {
-        message.channel.send({embed:{
-          title: 'Error',
-          description: `User \`${user.user.username}\` is already muted`,
-          color: errClr
-        }});
-        return;
-      }
-
-      await user.addRole(role);
-      message.channel.send({embed:{
-        title: 'Operation successful',
-        description: `Muted user \`${user.user.username}\``,
-        color: trueClr
-      }});
-    }
-    f();
-  }*/
-
-  // Mute command
   if (msg.startsWith(`${prefix}MUTE`)) {
     hasAdmin = message.member.hasPermission("ADMINISTRATOR");
     if (!hasAdmin) {
@@ -1577,6 +1507,91 @@ bot.on('message', message => {
       message.channel.send({embed:{
         title: 'Operation successful!',
         description: `Muted user \`${member.user.username}\``,
+        color: trueClr
+      }});
+    }
+  }
+
+  // Unmute command
+  if (msg.startsWith(`${prefix}unmute`)) {
+    hasAdmin = message.member.hasPermission("ADMINISTRATOR");
+    if (!hasAdmin) {
+      message.channel.send({embed:{
+        title:'Error',
+        description:'This command is only for admins',
+        color: errClr,
+      }});
+      return;
+    }
+    if (!args[0]) {
+      message.channel.send({embed:{
+        title: 'Error',
+        description: `Please specify the user to mute as your first arguement`,
+        color: errClr
+      }});
+      return;
+    }
+    let user = bot.users.get(args.join(' ')) || bot.users.find(u => u.username === args.join(' ')) || message.mentions.users.first();
+    if (!user) {
+      message.channel.send({embed:{
+        title: 'Error',
+        description: `Couldn\'t find user \`${args.join(' ')}\``,
+        color: errClr
+      }});
+      return;
+    }
+    let member = message.guild.member(user);
+
+    let role = message.guild.roles.find(r => r.name === "GPS Muted");
+    if (!role) {
+      async function f() {
+        try {
+          let addedRole = await message.guild.createRole({
+            name: "GPS Muted",
+            color: "#000000",
+            permissions: []
+          });
+          await message.guild.channels.forEach(async(channel) => {
+            await channel.overwritePermissions(addedRole, {
+              "SEND_MESSAGES": false,
+              "ADD_REACTIONS": false
+            });
+          });
+
+          message.channel.send({embed:{
+            title: 'Error',
+            description: `The muted role wasn\'t created. Created a new mute role`,
+            color: errClr
+          }});
+        } catch(e) {
+          console.log(e);
+          return;
+        }
+      }
+      f();
+    }
+    else {
+      if (!member.roles.has(role.id)) {
+        message.channel.send({embed:{
+          title: 'Error',
+          description: `User \`${member.user.username}\` is not muted`,
+          color: errClr
+        }});
+        return;
+      }
+      member.removeRole(role.id)
+      .catch(err => {
+        console.error(err);
+        message.channel.send({embed:{
+          title: 'Error',
+          description: `Couldn\'t unmute user \`${member.user.username}\``,
+          color: errClr
+        }});
+        return;
+      });
+      message.channel.send({embed:{
+        title: 'Operation successful!',
+        description: `Unmuted \`${member.user.username}\``,
         color: trueClr
       }});
     }

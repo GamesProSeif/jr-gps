@@ -112,5 +112,17 @@
     "group": "Developer",
     "desc": "Sends one of the system files to the user",
     "usage": "sendfile <filename>"
+  },
+  "Mute": {
+    "name": "Mute",
+    "group": "Admin",
+    "desc": "Mutes a user",
+    "usage": "mute <user-mention/user-name/user-id>"
+  },
+  "Unmute": {
+    "name": "Unmute",
+    "group": "Admin",
+    "desc": "unmutes a user",
+    "usage": "unmute <user-mention/user-name/user-id>"
   }
 }
