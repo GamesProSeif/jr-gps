@@ -1450,7 +1450,7 @@ bot.on('message', message => {
     let member = message.guild.member(user);
 
     let senderMember = message.guild.member(sender);
-    if (member.highestRole >= senderMember.highestRole) {
+    if (member.highestRole.position >= senderMember.highestRole.position) {
       message.channel.send({embed:{
         title: 'Error',
         description: 'You cannot mute a user with a higher or same role as you',
@@ -1553,7 +1553,7 @@ bot.on('message', message => {
     let member = message.guild.member(user);
 
     let senderMember = message.guild.member(sender);
-    if (member.highestRole >= senderMember.highestRole) {
+    if (member.highestRole.position >= senderMember.highestRole.position) {
       message.channel.send({embed:{
         title: 'Error',
         description: 'You cannot unmute a user with a higher or same role as you',
