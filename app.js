@@ -1539,7 +1539,7 @@ bot.on('message', message => {
           message.channel.send({embed:{
             title: 'Operation successful!',
             description: `Muted user \`${member.user.username}\``,
-            color: errClr
+            color: trueClr
           }});
         } catch(e) {
           console.log(e);
@@ -1551,11 +1551,6 @@ bot.on('message', message => {
           return;
         }
       }
-      message.channel.send({embed:{
-        title: 'Operation successful!',
-        description: `Muted user \`${member.user.username}\``,
-        color: errClr
-      }});
       f();
     }
     else {
@@ -1582,7 +1577,7 @@ bot.on('message', message => {
       message.channel.send({embed:{
         title: 'Operation successful!',
         description: `Muted user \`${member.user.username}\``,
-        color: errClr
+        color: trueClr
       }});
     }
   }
