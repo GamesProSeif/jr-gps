@@ -1491,11 +1491,12 @@ bot.on('message', message => {
 
   // Mute command
   if (msg.startsWith(`${prefix}MUTE`)) {
-    if (!message.member.roles.some(r => ["Admin", "Coder"].includes(r.name))) {
+    hasAdmin = message.member.hasPermission("ADMINISTRATOR");
+    if (!hasAdmin) {
       message.channel.send({embed:{
-        title: 'Error',
-        description: 'This command is only available for admins',
-        color: errClr
+        title:'Error',
+        description:'This command is only for admins',
+        color: errClr,
       }});
       return;
     }
