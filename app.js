@@ -1527,7 +1527,7 @@ bot.on('message', message => {
             color: "#000000",
             permissions: []
           });
-          await message.guild.channels.forEach((channel) => {
+          await message.guild.channels.forEach(async(channel) => {
             await channel.overwritePermissions(addedRole, {
               "SEND_MESSAGES": false,
               "ADD_REACTIONS": false
