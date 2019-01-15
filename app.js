@@ -1513,7 +1513,7 @@ bot.on('message', message => {
   }
 
   // Unmute command
-  if (msg.startsWith(`${prefix}unmute`)) {
+  if (msg.startsWith(`${prefix}UNMUTE`)) {
     hasAdmin = message.member.hasPermission("ADMINISTRATOR");
     if (!hasAdmin) {
       message.channel.send({embed:{
