@@ -2395,22 +2395,22 @@ bot.on('message', message => {
 
 
   // To save the files
-  fs.writeFile('Storage/botData.json', JSON.stringify(botData, null, 4), (err) => {
+  fs.writeFile('Storage/botData.json', JSON.stringify(botData, null, 2), (err) => {
     if (err) console.error(err); // To log if there is an error
   });
-  fs.writeFile('Storage/wrnUsr.json', JSON.stringify(wrnUsr, null, 4), (err) => {
+  fs.writeFile('Storage/wrnUsr.json', JSON.stringify(wrnUsr, null, 2), (err) => {
     if (err) console.error(err);
   });
-  fs.writeFile('Storage/usrPoint.json', JSON.stringify(usrPoint, null, 4), (err) => {
+  fs.writeFile('Storage/usrPoint.json', JSON.stringify(usrPoint, null, 2), (err) => {
     if (err) console.error(err);
   });
-  fs.writeFile('Storage/ranks.json', JSON.stringify(ranks, null, 4), (err) => {
+  fs.writeFile('Storage/ranks.json', JSON.stringify(ranks, null, 2), (err) => {
     if (err) console.error(err);
   });
-  fs.writeFile('Storage/bannedWords.json', JSON.stringify(bannedWords, null, 4), (err) => {
+  fs.writeFile('Storage/bannedWords.json', JSON.stringify(bannedWords, null, 2), (err) => {
     if (err) console.error(err);
   });
-  fs.writeFile('Storage/reportLog.json', JSON.stringify(reportLog, null, 4), (err) => {
+  fs.writeFile('Storage/reportLog.json', JSON.stringify(reportLog, null, 2), (err) => {
     if (err) console.error(err);
   });
 
