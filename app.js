@@ -1449,6 +1449,16 @@ bot.on('message', message => {
     }
     let member = message.guild.member(user);
 
+    let senderMember = message.guild.member(sender);
+    if (member.highestRole >= senderMember.highestRole) {
+      message.channel.send({embed:{
+        title: 'Error',
+        description: 'You cannot mute a user with a higher or same role as you',
+        color: errClr
+      }});
+      return;
+    }
+
     let role = message.guild.roles.find(r => r.name === "GPS Muted");
     if (!role) {
       async function f() {
@@ -1541,6 +1551,16 @@ bot.on('message', message => {
       return;
     }
     let member = message.guild.member(user);
+
+    let senderMember = message.guild.member(sender);
+    if (member.highestRole >= senderMember.highestRole) {
+      message.channel.send({embed:{
+        title: 'Error',
+        description: 'You cannot unmute a user with a higher or same role as you',
+        color: errClr
+      }});
+      return;
+    }
 
     let role = message.guild.roles.find(r => r.name === "GPS Muted");
     if (!role) {
