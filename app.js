@@ -1694,6 +1694,7 @@ bot.on('message', message => {
         description: 'The minimum time to mute a user is 5 seconds',
         color: errClr
       }});
+      return;
     }
 
     let role = message.guild.roles.find(r => r.name === "GPS Muted");
