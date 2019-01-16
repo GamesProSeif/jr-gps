@@ -2610,7 +2610,7 @@ bot.on('ready', () => {
           if (err) console.error(err);
         });
 
-        message.channels.get(homeId).send({embed:{
+        bot.channels.get(homeId).send({embed:{
           title: 'Unmute Event',
           description: `Unmuted user \`${mutedMember.user.username}\``,
           color: trueClr
