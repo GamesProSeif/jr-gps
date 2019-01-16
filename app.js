@@ -2613,11 +2613,11 @@ bot.on('ready', () => {
         bot.channels.get(homeId).send({embed:{
           title: 'Unmute Event',
           description: `Unmuted user \`${mutedMember.user.username}\``,
-          color: trueClr
+          color: 0x2ff37a
         }});
       }
     }
-  })
+  }, 5000);
 });
 
 // Login
