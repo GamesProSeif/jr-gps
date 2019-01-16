@@ -8,6 +8,7 @@ let ranks = JSON.parse(fs.readFileSync('Storage/ranks.json', 'utf8'));
 let commands = JSON.parse(fs.readFileSync('Storage/commands.json', 'utf8'));
 let bannedWords = JSON.parse(fs.readFileSync('Storage/bannedWords.json', 'utf8'));
 let reportLog = JSON.parse(fs.readFileSync('Storage/reportLog.json', 'utf8'));
+let mutes = JSON.parse(fs.readFileSync('Storage/mutes.json', 'utf8'));
 let package = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
 let prefix = botData.prefix;
 let token = process.env.token; // replace with bot's token
@@ -1617,6 +1618,164 @@ bot.on('message', message => {
     }
   }
 
+  // Tempmute command
+  if (msg.startsWith(`${prefix}TEMPMUTE`)) {
+    hasAdmin = message.member.hasPermission("ADMINISTRATOR");
+    if (!hasAdmin) {
+      message.channel.send({embed:{
+        title:'Error',
+        description:'This command is only for admins',
+        color: errClr,
+      }});
+      return;
+    }
+    if (!args[0]) {
+      message.channel.send({embed:{
+        title: 'Error',
+        description: `Please specify the user to mute as your first arguement`,
+        color: errClr
+      }});
+      return;
+    }
+
+    let tokens = [].concat.apply([], args.join(' ').split('"').map(function(v,i){
+       return i%2 ? v : v.split(' ')
+    })).filter(Boolean);
+
+    let user = bot.users.get(tokens[0]) || bot.users.find(u => u.username === tokens[0]) || message.mentions.users.first();
+    if (!user) {
+      message.channel.send({embed:{
+        title: 'Error',
+        description: `Couldn\'t find user \`${tokens[0]}\``,
+        color: errClr
+      }});
+      return;
+    }
+    let member = message.guild.member(user);
+
+    let senderMember = message.guild.member(sender);
+    if (member.highestRole.position >= senderMember.highestRole.position) {
+      message.channel.send({embed:{
+        title: 'Error',
+        description: 'You cannot mute a user with a higher or same role as you',
+        color: errClr
+      }});
+      return;
+    }
+
+    if (!tokens[1]) {
+      message.channel.send({embed:{
+        title: 'Error',
+        description: 'Please specify the amount of time to mute the user in seconds',
+        color: trueClr
+      }});
+      return;
+    }
+    if (isNaN(tokens[1])) {
+      message.channel.send({embed:{
+        title: 'Error',
+        description: `\`${tokens[1]}\` is not a valid time in seconds`,
+        color: errClr
+      }});
+      return;
+    }
+    if (Number.isInteger(parseFloat(tokens[1]))) {
+      message.channel.send({embed:{
+        title: 'Error',
+        description: `\`${tokens[1]}\` is not a valid time in seconds`,
+        color: errClr
+      }});
+      return;
+    }
+    let timeMute = parseInt(tokens[1]);
+    if (timeMute < 5) {
+      message.channel.send({embed:{
+        title: 'Error',
+        description: 'The minimum time to mute a user is 5 seconds',
+        color: errClr
+      }});
+    }
+
+    let role = message.guild.roles.find(r => r.name === "GPS Muted");
+    if (!role) {
+      async function f() {
+        try {
+          let addedRole = await message.guild.createRole({
+            name: "GPS Muted",
+            color: "#000000",
+            permissions: []
+          });
+          await message.guild.channels.forEach(async(channel) => {
+            await channel.overwritePermissions(addedRole, {
+              "SEND_MESSAGES": false,
+              "ADD_REACTIONS": false
+            });
+          });
+          await member.addRole(addedRole.id);
+
+          mutes[member.user.id] = {
+            name: member.user.username,
+            id: member.id,
+            time: Date.now() + timeMute * 1000,
+            guildId: member.guild.id
+          }
+          fs.writeFile('Storage/mutes.json', JSON.stringify(mutes, null, 2), (err) => {
+            if (err) console.error(err);
+          });
+
+          message.channel.send({embed:{
+            title: 'Operation successful!',
+            description: `Muted user \`${member.user.username}\` for \`${timeMute}\` seconds`,
+            color: trueClr
+          }});
+        } catch(e) {
+          console.log(e);
+          message.channel.send({embed:{
+            title: 'Error',
+            description: `Couldn\'t mute user \`${member.user.username}\``,
+            color: errClr
+          }});
+          return;
+        }
+      }
+      f();
+    }
+    else {
+      if (member.roles.has(role.id)) {
+        message.channel.send({embed:{
+          title: 'Error',
+          description: `User \`${member.user.username}\` is already muted`,
+          color: errClr
+        }});
+        return;
+      }
+
+      member.addRole(role.id)
+        .catch(err => {
+          console.error(err);
+          message.channel.send({embed:{
+            title: 'Error',
+            description: `Couldn\'t mute user \`${member.user.username}\``,
+            color: errClr
+          }});
+          return;
+        });
+
+      mutes[member.user.id] = {
+        name: member.user.username,
+        id: member.id,
+        time: Date.now() + timeMute * 1000,
+        guildId: member.guild.id
+      }
+
+      message.channel.send({embed:{
+        title: 'Operation successful!',
+        description: `Muted user \`${member.user.username}\` for \`${timeMute}\` seconds`,
+        color: trueClr
+      }});
+    }
+  }
+
   // Points system //
 
   // Verify command
@@ -2375,9 +2534,15 @@ bot.on('message', message => {
         });
         message.delete();
         break;
-      case 'wrnUsr':
+      case 'WRNUSR':
         sender.send({
           files: [`./Storage/wrnUsr.json`]
+        });
+        message.delete();
+        break;
+      case 'MUTES':
+        sender.send({
+          files: [`./Storage/mutes.json`]
         });
         message.delete();
         break;
@@ -2413,6 +2578,9 @@ bot.on('message', message => {
   fs.writeFile('Storage/reportLog.json', JSON.stringify(reportLog, null, 2), (err) => {
     if (err) console.error(err);
   });
+  fs.writeFile('Storage/mutes.json', JSON.stringify(mutes, null, 2), (err) => {
+    if (err) console.error(err);
+  });
 
 
 });
@@ -2424,6 +2592,32 @@ bot.on('ready', () => {
 
   bot.user.setStatus('online'); // Status can be 'Online', 'idle', 'invisible', & 'dnd'
   bot.user.setActivity(`${prefix}help`);
+
+  bot.setInterval(() => {
+    for (let muted in mutes) {
+      let time = mutes[muted].time;
+      let guildId = mutes[muted].guildId;
+      let guild = bot.guilds.get(guildId);
+      let mutedMember = guild.members.get(muted);
+      let mutedRole = guild.roles.find(rle => rle.name === "GPS Muted");
+      if (!mutedRole) continue;
+
+      if (Date.now() > time) {
+        mutedMember.removeRole(mutedRole.id);
+        delete mutes[muted];
+
+        fs.writeFile('Storage/mutes.json', JSON.stringify(mutes, null, 2), (err) => {
+          if (err) console.error(err);
+        });
+
+        message.channels.get(homeId).send({embed:{
+          title: 'Unmute Event',
+          description: `Unmuted user \`${mutedMember.user.username}\``,
+          color: trueClr
+        }});
+      }
+    }
+  })
 });
 
 // Login
