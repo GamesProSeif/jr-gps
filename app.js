@@ -1671,7 +1671,6 @@ bot.on('message', message => {
       }});
       return;
     }
-    console.log(tokens[1]);
     if (isNaN(tokens[1])) {
       message.channel.send({embed:{
         title: 'Error',
@@ -1680,7 +1679,7 @@ bot.on('message', message => {
       }});
       return;
     }
-    if (Number.isInteger(parseFloat(tokens[1]))) {
+    if (!Number.isInteger(parseFloat(tokens[1]))) {
       message.channel.send({embed:{
         title: 'Error',
         description: `\`${tokens[1]}\` is not a valid time in seconds`,
