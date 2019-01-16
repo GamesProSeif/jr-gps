@@ -2601,6 +2601,9 @@ bot.on('ready', () => {
       let mutedMember = guild.members.get(muted);
       let mutedRole = guild.roles.find(rle => rle.name === "GPS Muted");
       if (!mutedRole) continue;
+      if (!mutedMember.roles.has(mutedRole.id)) {
+        delete mutes[muted];
+      }
 
       if (Date.now() > time) {
         mutedMember.removeRole(mutedRole.id);
