@@ -2599,6 +2599,7 @@ bot.on('message', message => {
       return;
     }
     // After that we finally get to kick the user
+    let userName = member.user.username
     member.kick().catch(err => {
       console.log(err);
       // It should also say that an error occurred
@@ -2612,12 +2613,13 @@ bot.on('message', message => {
     // If there's no error while kicking the member, send a message
     messsage.channel.send({embed:{
       title: 'Operation successful!',
-      description: `Kicked user ${member.user.username} from the server`,
+      description: `Kicked user ${userName} from the server`,
       color: trueClr
     }});
     // And that should be it, I have now to update the bot, so I have to do a couple of stuff
     // First, I'll have to change the version
     // Also I have to save "Ctrl + S"
+    // Then I have to push it to something called github
   }
 
 
