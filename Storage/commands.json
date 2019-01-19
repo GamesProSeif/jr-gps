@@ -122,7 +122,19 @@
   "Unmute": {
     "name": "Unmute",
     "group": "Admin",
-    "desc": "unmutes a user",
+    "desc": "Unmutes a user",
     "usage": "unmute <user-mention/user-name/user-id>"
+  },
+  "Kick": {
+    "name": "Kick",
+    "group": "Admin",
+    "desc": "Kicks a user",
+    "usage": "kick <user-mention/user-name/user-id>"
+  },
+  "Ban": {
+    "name": "Ban",
+    "group": "Admin",
+    "desc": "Bans a user",
+    "usage": "ban <user-mention/user-name/user-id>"
   }
 }
