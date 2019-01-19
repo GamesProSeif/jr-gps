@@ -2611,7 +2611,7 @@ bot.on('message', message => {
       return;
     });
     // If there's no error while kicking the member, send a message
-    messsage.channel.send({embed:{
+    message.channel.send({embed:{
       title: 'Operation successful!',
       description: `Kicked user ${userName} from the server`,
       color: trueClr
