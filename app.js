@@ -545,7 +545,7 @@ bot.on('message', message => {
           description: `Deleted report number \`${choiceNum}\` from the report log;`,
           color: trueClr
         }});
-      }).catch(err => console.log(err));
+      }).catch(err => console.log(err))
     }
     else if (args[0].toUpperCase() === 'LIST') {
       hasAdmin = message.member.hasPermission("ADMINISTRATOR");
@@ -2556,6 +2556,68 @@ bot.on('message', message => {
         message.delete();
         return;
     }
+  }
+
+  // Kick command (this command is the one that will kick the user)
+  if (msg.startsWith(`${prefix}KICK`)) {
+    hasAdmin = message.member.hasPermission("ADMINISTRATOR");
+    if (!hasAdmin) {
+      message.channel.send({embed:{
+        title:'Error',
+        description:'This command is only for admins',
+        color: errClr,
+      }});
+      return;
+    } // This checks if the user is an admin
+    if (!args[0]) {
+      message.channel.send({embed:{
+        title: 'Error',
+        description: 'Please specify the user to kick',
+        color: errClr
+      }});
+      return;
+    } // This checks if you didn't specify anything after the command
+    // For example: "/kick"
+
+    let user = bot.users.get(args.join(' ')) || bot.users.find(u => u.username === args.join(' ')) || message.mentions.users.first(); // This gets the user by his name/mention/id
+    if (!user) {
+      message.channel.send({embed:{
+        title: 'Error',
+        description: `Couldn\'t find user \`${args.join(' ')}\``,
+        color: errClr
+      }});
+      return;
+    } // If there's no user found, send an error
+    let member = message.guild.member(user); // There's a difference between a member and a user, a user defines one specific user with his own details like name and id, etc...
+    // A member is a user inside a server like spleef academy, so I'm getting the member from the user we found
+    if (!member.bannable) {
+      message.channel.send({embed:{
+        title: 'Error',
+        description: `User ${member.user.username} cannot be banned, this error is because the user might have a higher role, or I have a missing permission`,
+        color: errClr
+      }});
+      return;
+    }
+    // After that we finally get to kick the user
+    member.kick().catch(err => {
+      console.log(err);
+      // It should also say that an error occurred
+      message.channel.send({embed:{
+        title: 'Error',
+        description: 'An error occurred',
+        color: errClr
+      }});
+      return;
+    });
+    // If there's no error while kicking the member, send a message
+    messsage.channel.send({embed:{
+      title: 'Operation successful!',
+      description: `Kicked user ${member.user.username} from the server`,
+      color: trueClr
+    }});
+    // And that should be it, I have now to update the bot, so I have to do a couple of stuff
+    // First, I'll have to change the version
+    // Also I have to save "Ctrl + S"
   }
 
 
