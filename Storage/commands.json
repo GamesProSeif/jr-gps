@@ -119,6 +119,12 @@
     "desc": "Mutes a user",
     "usage": "mute <user-mention/user-name/user-id>"
   },
+  "Tempmute": {
+    "name": "Tempmute",
+    "group": "Admin",
+    "desc": "Temporarily mutes a user (put name inside quotes \")",
+    "usage": "tempmute \"<user-mention/user-name/user-id>\" <seconds>"
+  },
   "Unmute": {
     "name": "Unmute",
     "group": "Admin",
