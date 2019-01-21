@@ -2614,7 +2614,7 @@ bot.on('message', message => {
   }
 
   // Ban command
-  if (msg.startsWith(`${prefix}BAN`)) {
+  if (msg.startsWith(`${prefix}BAN `)) {
     hasAdmin = message.member.hasPermission("ADMINISTRATOR");
     if (!hasAdmin) {
       message.channel.send({embed:{

@@ -5,7 +5,7 @@
     "points": 0,
     "verified": false,
     "rank": "Default",
-    "messagesSent": 294,
+    "messagesSent": 299,
     "sweared": 0
   },
   "411350663281508352": {
@@ -59,7 +59,7 @@
     "points": 0,
     "verified": false,
     "rank": "Default",
-    "messagesSent": 335,
+    "messagesSent": 341,
     "sweared": 3
   },
   "429649637557796875": {
@@ -68,7 +68,7 @@
     "points": 0,
     "verified": false,
     "rank": "Default",
-    "messagesSent": 114,
+    "messagesSent": 120,
     "sweared": 0
   },
   "472386557454843914": {
@@ -104,7 +104,7 @@
     "points": 0,
     "verified": false,
     "rank": "Default",
-    "messagesSent": 20,
+    "messagesSent": 28,
     "sweared": 0
   },
   "452386438261243925": {
@@ -114,6 +114,33 @@
     "verified": false,
     "rank": "Default",
     "messagesSent": 4,
+    "sweared": 0
+  },
+  "447128434188091403": {
+    "name": "Mearionet",
+    "id": "447128434188091403",
+    "points": 0,
+    "verified": false,
+    "rank": "Default",
+    "messagesSent": 3,
+    "sweared": 0
+  },
+  "307481520271130625": {
+    "name": "Ṣhadow",
+    "id": "307481520271130625",
+    "points": 0,
+    "verified": false,
+    "rank": "Default",
+    "messagesSent": 2,
+    "sweared": 0
+  },
+  "171894303050825728": {
+    "name": "(Tcalfer) NexusKrome",
+    "id": "171894303050825728",
+    "points": 0,
+    "verified": false,
+    "rank": "Default",
+    "messagesSent": 1,
     "sweared": 0
   }
 }
