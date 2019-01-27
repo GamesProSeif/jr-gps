@@ -2,7 +2,7 @@
 
 ## Description
 
-This is a private bot that allows the user to make ranks and a lot of stuff. It also has some moderation commands, and also a point system ready for you!
+This is a private bot that allows the user to make ranks and a lot of stuff. It also has some moderation commands, and also a point system ready for you! You will like it...
 
 ## Adding the bot to the server
 

@@ -1,1 +1,32 @@
-[{"name":"Default","requiredPoints":0,"order":1},{"name":"Noob","requiredPoints":50,"order":2},{"name":"Good","requiredPoints":100,"order":3},{"name":"Pro","requiredPoints":150,"order":4},{"name":"Epic","requiredPoints":200,"order":5},{"name":"Legendary","requiredPoints":500,"order":6}]
+[
+  {
+    "name": "Default",
+    "requiredPoints": 0,
+    "order": 1
+  },
+  {
+    "name": "Noob",
+    "requiredPoints": 50,
+    "order": 2
+  },
+  {
+    "name": "Good",
+    "requiredPoints": 100,
+    "order": 3
+  },
+  {
+    "name": "Pro",
+    "requiredPoints": 150,
+    "order": 4
+  },
+  {
+    "name": "Epic",
+    "requiredPoints": 200,
+    "order": 5
+  },
+  {
+    "name": "Legendary",
+    "requiredPoints": 500,
+    "order": 6
+  }
+]
